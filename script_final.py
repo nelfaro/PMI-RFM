@@ -45,7 +45,7 @@ except Error as e:
 query = (f"""SELECT ID FROM pr_2_posts 
                 WHERE post_type = 'shop_order' and post_status = 'wc-bill' 
                 and YEAR(post_date) = 2024
-                and MONTH(post_date) = 9
+                and MONTH(post_date) = 11
             ORDER BY post_date DESC;""")
 
 
@@ -409,7 +409,7 @@ print(f'Fecha inicial {data['fecha'].min()} / Fecha final {data['fecha'].max()}'
 #Impresiones
 desc = data.describe()
 
-ruta_arch = 'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/describe_df_formateado_09_24.txt'
+ruta_arch = 'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/describe_df_formateado_11_24.txt'
 
 with open(ruta_arch, 'w') as file:
      file.write(desc.to_string())
@@ -419,7 +419,7 @@ precios = precios_mensual.copy()
 
 data = data_mensual
 
-data_anterior = pd.read_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-08/data_18_meses_hasta_AGO_2024.csv', index_col = 0) 
+data_anterior = pd.read_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/data_18_meses_hasta_NOV_2024.csv', index_col = 0) 
 
 # Calcular el índice de actualización con los 4 productos más vendidos del mes 
 productos_mas_vendidos = data.groupby('product_id').sum(numeric_only=True)['quantity'].reset_index().sort_values('quantity', ascending=False).head(4)['product_id'].values 
@@ -464,7 +464,7 @@ data_anterior.drop(columns=['precio_viejo'], inplace=True)
 data_hasta_mes_ant = pd.concat([data_anterior, data], ignore_index=True) 
 
 # Guardar el CSV actualizado al mes actual
-data_hasta_mes_ant.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/data_18_meses_hasta_SEP_2024.csv') 
+data_hasta_mes_ant.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/data_18_meses_hasta_NOV_2024.csv') 
 
 # Recargar el CSV para procesamiento adicional 
 #data_hasta_mes_ant = pd.read_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/data_18_meses_hasta_SEP_2024.csv') 
@@ -501,7 +501,7 @@ data = data[data.mail.isin(clientes_que_compraron_ultimo_anio)]
 
 
 # Guardar el CSV final con los datos filtrados 
-data.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/data_filtrada_hasta_mes_ant_09_24.csv', index=False) 
+data.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/data_filtrada_hasta_mes_ant_11_24.csv', index=False) 
 
 #---------------------------------------------------------------------------------------------------------------------------
 # PATRONES DE CONSUMO
@@ -737,7 +737,7 @@ print ("\nEstadisticas por cluster:")
 print (stats)
 
 
-carpeta = "C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09"
+carpeta = "C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11"
 output_file = f"{carpeta}/Estadisticas_cluster.txt"
 
 with open(output_file, "w") as file:
@@ -800,7 +800,7 @@ for rfm_value, group in grouped:
 # Guardar el describe de cada cluster en un archivo txt separado 
 
 for rfm_value, group in grouped: 
-    file_name = f"C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/describe_cluster_{rfm_value}.txt" 
+    file_name = f"C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/describe_cluster_{rfm_value}.txt" 
 
     # Convertir el describe() a una cadena de texto 
     describe_str = group.describe().to_string() 
@@ -891,7 +891,8 @@ rfm_data['rfm'] = rfm_data['rfm'].map(cluster_traducciones)
 
 # Juntar y poner fecha 
 segmentacion_clientes = pd.merge(clientes_features_relevantes, rfm_data)  
-segmentacion_clientes['fecha_segmentacion'] = '2024-09'  
+segmentacion_clientes['fecha_segmentacion'] = '2024-11-01' 
+ 
 print('Segm cliente',segmentacion_clientes.head(5))
 
 # Marca que consumen los monomarca  
@@ -962,7 +963,7 @@ segmentacion_clientes.rename(columns={'fecha':'ultima_compra'}, inplace=True)
 segmentacion_clientes_0 = segmentacion_clientes.copy()
   
 # Importo segmentación vieja  
-segmentacio_vieja = pd.read_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-08/segmentacion_18_meses_hasta_AGO_2024.csv')  
+segmentacio_vieja = pd.read_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-10/segmentacion_18_meses_hasta_OCT_2024.csv')  
 segmentacion_clientes = pd.concat([segmentacio_vieja, segmentacion_clientes_0], ignore_index=True)  
 
 # Cambio estrella por fidelizados  
@@ -1052,16 +1053,16 @@ print(segmentos_gap_perdido)
 #--------------------------------------------------------------------
 
 # Guardo CSV  
-segmentacion_clientes.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/segmentacion_18_meses_hasta_SEP_2024.csv', index=False)  
-segmentacion_clientes.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/output.csv', index=False)  
-segmentacion_clientes_enpeligro.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/output_enpeligro.csv', index=False) 
-segmentacion_clientes_fidelizado.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/output_fidelizado.csv', index=False)  
-segmentacion_clientes_perdido.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/output_perdido.csv', index=False)  
+segmentacion_clientes.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/segmentacion_18_meses_hasta_NOV_2024.csv', index=False)  
+segmentacion_clientes.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/output.csv', index=False)  
+segmentacion_clientes_enpeligro.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/output_enpeligro.csv', index=False) 
+segmentacion_clientes_fidelizado.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/output_fidelizado.csv', index=False)  
+segmentacion_clientes_perdido.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/output_perdido.csv', index=False)  
 
 
   
 # Guardar el DataFrame actualizado de rfm_data en un nuevo CSV
-rfm_data.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-09/resultados_cluster_rfm_etiquetado_mensual_09_24.csv', index=False) 
+rfm_data.to_csv(r'C:/Users/ccendago/OneDrive - Philip Morris International/Sin Clientes Historicos copy/2024-11/resultados_cluster_rfm_etiquetado_mensual_11_24.csv', index=False) 
 
   
 
